@@ -1,2 +1,4 @@
 ﻿  main.cpp
+E:\C++\SMFL_Bong\SMFL_Bong\main.cpp(47,23): warning C4018: '<': signed/unsigned mismatch
+E:\C++\SMFL_Bong\SMFL_Bong\main.cpp(150,24): warning C4018: '<': signed/unsigned mismatch
   SMFL_Bong.vcxproj -> E:\C++\SMFL_Bong\Debug\SMFL_Bong.exe

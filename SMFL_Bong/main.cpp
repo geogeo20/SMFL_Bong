@@ -14,6 +14,7 @@ int main()
 	const int gameHeight = 600;
 	sf::Vector2f platSize(100, 25);
 	float ballRadius = 10.0f;
+	int blocksAmmount = 10;
 
 
 	sf::RenderWindow window(sf::VideoMode(gameWidth, gameHeight, 32), "PONG", sf::Style::Titlebar | sf::Style::Close);
@@ -41,12 +42,14 @@ int main()
 	ball.setOrigin(ballRadius / 2, ballRadius / 2);
 	ball.setPosition(gameWidth / 2, gameHeight / 2);
 
-	std::vector <sf::RectangleShape> blocks(3);
+	std::vector <sf::RectangleShape> blocks(blocksAmmount);
 
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < blocksAmmount; i++)
 	{
+		
 		blocks[i] = platform;
-		blocks[i].setPosition(ball.getPosition().x, platSize.y*(i+1));
+		blocks[i].setFillColor(sf::Color::Yellow);
+		blocks[i].setPosition(ball.getPosition().x +platSize.x*i, platSize.y);
 	}
 
 
@@ -60,7 +63,7 @@ int main()
 	
 
 	const float ballSpeed = 400.f;
-	float ballAngle = 2.f;
+	float ballAngle = pi / 4;
 
 
 	sf::Clock clock;
@@ -96,27 +99,45 @@ int main()
 		if (ball.getPosition().x - ballRadius < 0.f)
 		{
 			ballSound.play();
-			ballAngle = -2*ballAngle;
+			ballAngle = pi - ballAngle;
 			ball.setPosition(ballRadius + 0.01f, ball.getPosition().y);
 		}
 		if (ball.getPosition().x + ballRadius > gameWidth)
 		{
 			ballSound.play();
-			ballAngle = -2*ballAngle;
+			ballAngle = pi - ballAngle;
 			ball.setPosition(gameWidth - ballRadius - 0.01f , ball.getPosition().y);
 		}
 		if (ball.getPosition().y - ballRadius < 0.f)
 		{
 			ballSound.play();
 			ballAngle = -ballAngle;
+			//ballAngle = pi - ballAngle - (std::rand() % 20) * pi / 180;
 			ball.setPosition(ball.getPosition().x, ballRadius + 0.01f);
 		}
 		if (ball.getPosition().y + ballRadius > gameHeight)
 		{
 			ballSound.play();
 			ballAngle = -ballAngle;
+			//ballAngle = pi - ballAngle - (std::rand() % 20) * pi / 180;
 			ball.setPosition(ball.getPosition().x, gameHeight - ballRadius - 0.01f);
 		}
+		
+		if (ball.getPosition().x + ballRadius >= platform.getPosition().x - platSize.x /2 &&
+			ball.getPosition().x - ballRadius <= platform.getPosition().x + platSize.x / 2 &&
+			ball.getPosition().y + ballRadius >= platform.getPosition().y - platSize.y / 2 &&
+			ball.getPosition().y - ballRadius <= platform.getPosition().y + platSize.y / 2)
+		{
+			
+				ballAngle =- ballAngle - (std::rand() % 20) * pi / 180;
+				ballSound.play();
+				ball.setPosition(ball.getPosition().x, platform.getPosition().y - ballRadius - platSize.y / 2 + 0.1f );
+			
+				
+
+
+		}
+
 
 
 
@@ -126,7 +147,7 @@ int main()
 
 		window.clear();
 		window.draw(platform);
-		for (size_t i = 0; i < 3; i++)
+		for (size_t i = 0; i < blocksAmmount; i++)
 		{
 			window.draw(blocks[i]);
 		}
